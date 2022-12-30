@@ -107,6 +107,45 @@ $ curl http://127.0.0.1:4040
 
 ----
 
+### HTTP with Express
+
+```javascript
+const express = require('express')
+const app = express()
+const port = 4040
+
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+})
+```
+
+----
+
+### HTTP with Koa
+
+```javascript
+const Koa = require('koa')
+const Router = require('@koa/router')
+
+const app = new Koa()
+const router = new Router()
+
+router.get('hello', '/', ctx => {
+  ctx.body = 'Hello World'
+})
+
+app
+  .use(router.routes())
+  .use(router.allowedMethods())
+app.listen(4040)
+```
+
+----
+
 ### HTTP with Hapi
 
 ```javascript
@@ -123,6 +162,30 @@ const init = async () => {
   console.log('Server running on %s', server.info.uri)
 }
 init()
+```
+
+----
+
+### HTTP with Fastify
+
+```javascript
+const Fastify = require('fastify')
+const server = Fastify({logger: true})
+
+server.get('/', async (request, reply) => {
+  return { hello: 'world' }
+})
+
+const start = async () => {
+  try {
+    await server.listen({ port: 4040 })
+  } catch (err) {
+    server.log.error(err)
+    process.exit(1)
+  }
+}
+start()
+
 ```
 
 ---

@@ -4,6 +4,7 @@ import pluginLogger from './lib/logger'
 import pluginAuthBasic from './lib/auth-basic'
 
 import hello from './routes/hello'
+import movies from './routes/movies'
 import health from './routes/health'
 import validated from './routes/validated'
 import authBasic from './routes/auth-basic'
@@ -28,6 +29,7 @@ export default async (options?: Hapi.ServerOptions): Promise<Readonly<Hapi.Serve
 
   await Promise.all([
     server.register(hello, {routes: {prefix: '/api/hello'}}),
+    server.register(movies, {routes: {prefix: '/api/movies'}}),
     server.register(health, {routes: {prefix: '/api/health'}}),
     server.register(validated, {routes: {prefix: '/api/validated'}}),
     server.register(authBasic, {routes: {prefix: '/api/auth-basic'}}),

@@ -1,0 +1,6 @@
+export const getAll = async () => 'from getAll'
+export const getOne = async () => 'from getOne'
+export const postOne = async () => 'from postOne'
+export const putOne = async () => 'from putOne'
+export const deleteOne = async () => 'from deleteOne'
+export const search = async () => 'from search'

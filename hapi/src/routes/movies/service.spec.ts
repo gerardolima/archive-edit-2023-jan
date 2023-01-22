@@ -1,9 +1,9 @@
 import {
   getAll,
   getOne,
-  postOne,
-  putOne,
-  deleteOne,
+  create,
+  update,
+  remove,
   search,
 } from './service'
 
@@ -22,24 +22,24 @@ describe('getOne', () => {
   })
 })
 
-describe('postOne', () => {
+describe('create', () => {
   it('implement tests', async () => {
-    const res = await postOne()
-    expect(res).toEqual('from postOne')
+    const res = await create()
+    expect(res).toEqual('from create')
   })
 })
 
-describe('putOne', () => {
+describe('update', () => {
   it('implement tests', async () => {
-    const res = await putOne()
-    expect(res).toEqual('from putOne')
+    const res = await update()
+    expect(res).toEqual('from update')
   })
 })
 
-describe('deleteOne', () => {
+describe('remove', () => {
   it('implement tests', async () => {
-    const res = await deleteOne()
-    expect(res).toEqual('from deleteOne')
+    const res = await remove()
+    expect(res).toEqual('from remove')
   })
 })
 

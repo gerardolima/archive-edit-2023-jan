@@ -1,6 +1,6 @@
-export const getAll = async () => 'from getAll'
-export const getOne = async () => 'from getOne'
-export const postOne = async () => 'from postOne'
-export const putOne = async () => 'from putOne'
-export const deleteOne = async () => 'from deleteOne'
-export const search = async () => 'from search'
+export const getAll = () => Promise.resolve('from getAll')
+export const getOne = () => Promise.resolve('from getOne')
+export const create = () => Promise.resolve('from create')
+export const update = () => Promise.resolve('from update')
+export const remove = () => Promise.resolve('from remove')
+export const search = () => Promise.resolve('from search')

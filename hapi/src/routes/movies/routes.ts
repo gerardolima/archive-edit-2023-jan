@@ -16,9 +16,15 @@ import {
 const getAllMovies = Object.freeze<ServerRoute>({
   method: 'GET',
   path: '/',
-  handler: async (_req, _h) => {
-    const res = await Promise.resolve(getAll())
-    return res
+  handler: async (req, h) => {
+
+    const movies = await req.mongo.db
+      .collection('movies')
+      .find()
+      .limit(20)
+      .toArray()
+
+    return movies
   },
 })
 

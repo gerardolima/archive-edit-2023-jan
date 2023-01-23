@@ -2,6 +2,7 @@ import Hapi from '@hapi/hapi'
 
 import pluginLogger from './lib/logger'
 import pluginAuthBasic from './lib/auth-basic'
+import pluginMongo from './lib/mongo'
 
 import hello from './routes/hello'
 import movies from './routes/movies'
@@ -25,6 +26,7 @@ export default async (options?: Hapi.ServerOptions): Promise<Readonly<Hapi.Serve
   await Promise.all([
     server.register(pluginLogger),
     server.register(pluginAuthBasic),
+    server.register(pluginMongo),
   ])
 
   await Promise.all([

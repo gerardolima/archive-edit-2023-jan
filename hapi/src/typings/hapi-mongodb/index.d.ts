@@ -17,8 +17,8 @@ declare module 'hapi-mongodb' {
 
     export interface HapiMongo {
       lib: typeof MongoDB
-      ObjectID: MongoDB.ObjectId
-      ObjectId: MongoDB.ObjectId
+      ObjectID: typeof MongoDB.ObjectId
+      ObjectId: typeof MongoDB.ObjectId
       db: MongoDB.Db
       client: MongoDB.MongoClient
     }

@@ -1,5 +1,7 @@
-import type {ServerRoute} from '@hapi/hapi'
+import MongoDB from 'mongodb'
+import type {ServerRoute, Request} from '@hapi/hapi'
 import {
+  Movie,
   getAll,
   getOne,
   create,
@@ -7,6 +9,7 @@ import {
   remove,
   search,
 } from './service'
+import { Payload } from '@hapi/boom'
 
 
 /**
@@ -16,15 +19,14 @@ import {
 const getAllMovies = Object.freeze<ServerRoute>({
   method: 'GET',
   path: '/',
-  handler: async (req, h) => {
+  handler: (req, _h) => {
+    // get data from request
+    const mongo = req.mongo
+    const offset = Number(req.query['offset']) || 0
+    const limit = Number(req.query['limit']) || 20
 
-    const movies = await req.mongo.db
-      .collection('movies')
-      .find()
-      .limit(20)
-      .toArray()
-
-    return movies
+    // call handler (request-agnostic)
+    return getAll(mongo, offset, limit)
   },
 })
 
@@ -35,9 +37,23 @@ const getAllMovies = Object.freeze<ServerRoute>({
 const postMovie = Object.freeze<ServerRoute>({
   method: 'POST',
   path: '/',
-  handler: async (_req, _h) => {
-    const res = await Promise.resolve(create())
-    return res
+  options: {
+    validate: {
+      payload: (v: unknown) => Movie.parseAsync(v),
+    },
+  },
+  handler: async (req: Request<{Payload: Movie}>, h) => {
+    // get data from request
+    const mongo = req.mongo
+    const movie = req.payload
+
+    // call handler (request-agnostic)
+    const res = await create(mongo, movie)
+    return h.response(res)
+      .code(201)
+      .header('location', `${req.url}/${res.insertedId}`)
+
+    // refer to https://www.rfc-editor.org/rfc/rfc9110.html#name-location
   },
 })
 
@@ -48,9 +64,13 @@ const postMovie = Object.freeze<ServerRoute>({
 const getOneMovie = Object.freeze<ServerRoute>({
   method: 'GET',
   path: '/{id}',
-  handler: async (_req, _h) => {
-    const res = await Promise.resolve(getOne())
-    return res
+  handler: async (req, _h) => {
+    // get data from request
+    const mongo = req.mongo
+    const id = req.params.id
+
+    // call handler (request-agnostic)
+    return getOne(mongo, id)
   },
 })
 
@@ -61,9 +81,19 @@ const getOneMovie = Object.freeze<ServerRoute>({
 const putMovie = Object.freeze<ServerRoute>({
   method: 'PUT',
   path: '/{id}',
-  handler: async (_req, _h) => {
-    const res = await Promise.resolve(update())
-    return res
+  options: {
+    validate: {
+      payload: (v: unknown) => Movie.parseAsync(v),
+    },
+  },
+  handler: async (req: Request<{Payload: Movie}>, h) => {
+    // get data from request
+    const mongo = req.mongo
+    const id = req.params.id
+    const movie = req.payload
+
+    // call handler (request-agnostic)
+    return update(mongo, id, movie)
   },
 })
 
@@ -74,9 +104,13 @@ const putMovie = Object.freeze<ServerRoute>({
 const deleteMovie = Object.freeze<ServerRoute>({
   method: 'DELETE',
   path: '/{id}',
-  handler: async (_req, _h) => {
-    const res = await Promise.resolve(remove())
-    return res
+  handler: async (req, _h) => {
+    // get data from request
+    const mongo = req.mongo
+    const id = req.params.id
+
+    // call handler (request-agnostic)
+    return remove(mongo, id)
   },
 })
 
@@ -87,9 +121,13 @@ const deleteMovie = Object.freeze<ServerRoute>({
 const getSearch = Object.freeze<ServerRoute>({
   method: 'GET',
   path: '/search',
-  handler: async (_req, _h) => {
-    const res = await Promise.resolve(search())
-    return res
+  handler: async (req, _h) => {
+    // get data from request
+    const mongo = req.mongo
+    const query = req.query.term
+
+    // call handler (request-agnostic)
+    return search(mongo, query)
   },
 })
 

@@ -1,4 +1,4 @@
-import type {ServerRoute, Request} from '@hapi/hapi'
+import hapi from '@hapi/hapi'
 import z from 'zod'
 import {echo} from './service'
 
@@ -6,7 +6,7 @@ import {echo} from './service'
 /**
  * @handle `GET /`
  */
-const getDefault = Object.freeze<ServerRoute>({
+const getDefault = Object.freeze<hapi.ServerRoute>({
   method: 'GET',
   path: '/',
   handler: req => echo({
@@ -24,7 +24,7 @@ const getDefault = Object.freeze<ServerRoute>({
 /**
  * @handle `GET /from-path/{name}/{age}`
  */
-const getByPath = Object.freeze<ServerRoute>({
+const getByPath = Object.freeze<hapi.ServerRoute>({
   method: 'GET',
   path: '/from-path/{name}/{age}',
   options: {
@@ -32,7 +32,7 @@ const getByPath = Object.freeze<ServerRoute>({
       params: (v: unknown) => NameAndAge.parseAsync(v),
     },
   },
-  handler: (req: Request & {params: NameAndAge}) => echo({
+  handler: (req: hapi.ServerRoute & {params: NameAndAge}) => echo({
     name: req.params.name,
     age: req.params.age,
   }),
@@ -42,7 +42,7 @@ const getByPath = Object.freeze<ServerRoute>({
 /**
  * @handle `GET /from-query`
  */
-const getByQuery = Object.freeze<ServerRoute>({
+const getByQuery = Object.freeze<hapi.ServerRoute>({
   method: 'GET',
   path: '/from-query',
   options: {
@@ -50,7 +50,7 @@ const getByQuery = Object.freeze<ServerRoute>({
       query: (v: unknown) => NameAndAge.parseAsync(v),
     },
   },
-  handler: (req: Request & {query: NameAndAge}) => echo({
+  handler: (req: hapi.ServerRoute & {query: NameAndAge}) => echo({
     name: req.query.name,
     age: req.query.age,
   }),
@@ -59,7 +59,7 @@ const getByQuery = Object.freeze<ServerRoute>({
 /**
  * @handle `GET /from-headers`
  */
-const getByHeader = Object.freeze<ServerRoute>({
+const getByHeader = Object.freeze<hapi.ServerRoute>({
   method: 'GET',
   path: '/from-headers',
   options: {
@@ -67,7 +67,7 @@ const getByHeader = Object.freeze<ServerRoute>({
       headers: (v: unknown) => NameAndAge.parseAsync(v),
     },
   },
-  handler: (req: Request & {headers: NameAndAge}) => echo({
+  handler: (req: hapi.ServerRoute & {headers: NameAndAge}) => echo({
     name: req.headers.name,
     age: req.headers.age,
   }),
@@ -76,7 +76,7 @@ const getByHeader = Object.freeze<ServerRoute>({
 /**
  * @handle `POST /from-payload`
  */
-const getByPayload = Object.freeze<ServerRoute>({
+const getByPayload = Object.freeze<hapi.ServerRoute>({
   method: 'POST',
   path: '/from-payload',
   options: {
@@ -84,7 +84,7 @@ const getByPayload = Object.freeze<ServerRoute>({
       payload: (v: unknown) => NameAndAge.parseAsync(v),
     },
   },
-  handler: (req: Request & {payload: NameAndAge}) => echo({
+  handler: (req: hapi.ServerRoute & {payload: NameAndAge}) => echo({
     name: req.payload.name,
     age: req.payload.age,
   }),

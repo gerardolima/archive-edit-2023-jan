@@ -13,7 +13,7 @@ export default Object.freeze<Hapi.Plugin<void>>({
     const usr = '--'
     const pwd = '--'
     const options: hapiMongo.Options = {
-      url: `mongodb+srv://${usr}:${pwd}@edit-backend-jan-2023.6j9py79.mongodb.net/sample_mflix?retryWrites=true&w=majority`,
+      url: `mongodb+srv://${usr}:${pwd}@edit-backend-jan-2023.6j9py79.mongodb.net/sample_mflix?retryWrites=true&w=majority`, // eslint-disable-line max-len
       settings: {useUnifiedTopology: true},
       decorate: true,
     }

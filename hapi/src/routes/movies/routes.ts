@@ -1,4 +1,4 @@
-import type {ServerRoute, Request} from '@hapi/hapi'
+import hapi from '@hapi/hapi'
 import {
   Movie,
   getAll,
@@ -14,7 +14,7 @@ import {
  * Get all movies
  * @handle `GET /`
  */
-const getAllMovies = Object.freeze<ServerRoute>({
+const getAllMovies = Object.freeze<hapi.ServerRoute>({
   method: 'GET',
   path: '/',
   handler: (req, _h) => {
@@ -32,7 +32,7 @@ const getAllMovies = Object.freeze<ServerRoute>({
  * Add a new movie to the database
  * @handle `POST /`
  */
-const postMovie = Object.freeze<ServerRoute>({
+const postMovie = Object.freeze<hapi.ServerRoute>({
   method: 'POST',
   path: '/',
   options: {
@@ -40,9 +40,9 @@ const postMovie = Object.freeze<ServerRoute>({
       payload: (v: unknown) => Movie.parseAsync(v),
     },
   },
-  handler: async (req: Request<{Payload: Movie}>, h) => {
+  handler: async (req: hapi.Request<{Payload: Movie}>, h) => { // eslint-disable-line @typescript-eslint/naming-convention
     // get data from request
-    const mongo = req.mongo
+    const {mongo} = req
     const movie = req.payload
 
     // call handler (request-agnostic)
@@ -59,10 +59,10 @@ const postMovie = Object.freeze<ServerRoute>({
  * Get one movie
  * @handle `GET /{id}`
  */
-const getOneMovie = Object.freeze<ServerRoute>({
+const getOneMovie = Object.freeze<hapi.ServerRoute>({
   method: 'GET',
   path: '/{id}',
-  handler: async (req, _h) => {
+  handler: (req, _h) => {
     // get data from request
     const {mongo} = req
     const {id} = req.params
@@ -76,7 +76,7 @@ const getOneMovie = Object.freeze<ServerRoute>({
  * Replace a movie
  * @handle `PUT /{id}`
  */
-const putMovie = Object.freeze<ServerRoute>({
+const putMovie = Object.freeze<hapi.ServerRoute>({
   method: 'PUT',
   path: '/{id}',
   options: {
@@ -84,7 +84,8 @@ const putMovie = Object.freeze<ServerRoute>({
       payload: (v: unknown) => Movie.parseAsync(v),
     },
   },
-  handler: async (req: Request<{Payload: Movie}>, h) => {
+  handler: (req: hapi.Request<{Payload: Movie}>, _h) => { // eslint-disable-line @typescript-eslint/naming-convention
+
     // get data from request
     const {mongo} = req
     const {id} = req.params
@@ -99,10 +100,10 @@ const putMovie = Object.freeze<ServerRoute>({
  * Delete a movie from the database
  * @handle `DELETE /{id}`
  */
-const deleteMovie = Object.freeze<ServerRoute>({
+const deleteMovie = Object.freeze<hapi.ServerRoute>({
   method: 'DELETE',
   path: '/{id}',
-  handler: async (req, _h) => {
+  handler: (req, _h) => {
     // get data from request
     const {mongo} = req
     const {id} = req.params
@@ -116,13 +117,13 @@ const deleteMovie = Object.freeze<ServerRoute>({
  * Get all movies
  * @handle `GET /search`
  */
-const getSearch = Object.freeze<ServerRoute>({
+const getSearch = Object.freeze<hapi.ServerRoute>({
   method: 'GET',
   path: '/search',
-  handler: async (req, _h) => {
+  handler: (req, _h) => {
     // get data from request
     const {mongo} = req
-    const term = req.query.term
+    const {term} = req.query
 
     // call handler (request-agnostic)
     return search(mongo, term)
